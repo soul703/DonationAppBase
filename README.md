@@ -130,9 +130,9 @@ Dự án này được cấp phép dưới Giấy phép MIT. Xem file `LICENSE` 
 
 ## 📧 Liên hệ
 
-[Tên của bạn] - [@YourTwitterHandle] - [your.email@example.com]
+Bùi Mạnh Sang - buimanhsang@gmail.com
 
-Link dự án: [https://github.com/your-username/donation-app](https://github.com/your-username/donation-app)
+Link dự án: https://github.com/soul703/DonationAppBase.git
 
 ---
 
