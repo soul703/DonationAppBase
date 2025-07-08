@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/your-user-id/your-image-id.png" alt="DonationApp Logo" width="150"/>
+  <img src="https://raw.githubusercontent.com/soul703/DonationAppBase/main/screenshots/logo.png" alt="DonationApp Logo" width="150"/>
   <h1>💖 DonationApp - Nền tảng Quyên góp Từ thiện</h1>
   <p>
     Một ứng dụng web full-stack được xây dựng bằng Spring Boot và Vanilla JS, giúp tạo và quản lý các chiến dịch quyên góp một cách minh bạch, hiệu quả và dễ dàng.
