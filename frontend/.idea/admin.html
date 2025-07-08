@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang Quản Trị - Donation App</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+</head>
+<script>
+  // Script bảo vệ trang admin
+  (function protectAdminPage() {
+    const loggedInUserString = sessionStorage.getItem('loggedInUser');
+    if (!loggedInUserString) {
+      // Nếu chưa đăng nhập, đá về trang login
+      window.location.href = 'login.html';
+      return;
+    }
+
+    try {
+      const user = JSON.parse(loggedInUserString);
+      // Nếu đã đăng nhập nhưng không phải ADMIN, đá về trang chủ
+      if (!user.role || user.role.roleName !== 'ROLE_ADMIN') {
+        alert('Bạn không có quyền truy cập trang này.');
+        window.location.href = 'index.html';
+      }
+    } catch (e) {
+      // Nếu dữ liệu session hỏng, cũng đá về trang login
+      window.location.href = 'login.html';
+    }
+  })();
+</script>
+<body>
+<!-- Thanh điều hướng chung -->
+<header class="main-header">
+  <a href="index.html" class="logo">DonationApp</a>
+  <nav>
+    <a href="index.html">Trang Chủ</a>
+  </nav>
+</header>
+
+<!-- Nội dung chính của trang quản trị -->
+<div class="container">
+  <h1>Bảng điều khiển Quản trị</h1>
+
+  <!-- Khu vực quản lý Đợt Quyên Góp -->
+  <section class="admin-section">
+    <div class="admin-header">
+      <h2>Quản lý các Đợt Quyên Góp</h2>
+      <button id="addDonationBtn" class="btn btn-primary">Thêm Đợt Quyên Góp Mới</button>
+    </div>
+    <table class="admin-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tên Chiến Dịch</th>
+        <th>Mã</th>
+        <th>Trạng thái</th>
+        <th style="width: 150px;">Hành động</th>
+      </tr>
+      </thead>
+      <tbody id="donationsTableBody">
+      <!-- Dữ liệu Donations sẽ được JavaScript chèn vào đây -->
+      </tbody>
+    </table>
+    <div id="donationPagination" class="pagination-container"></div>
+        <!-- Nút phân trang sẽ được JavaScript chèn vào đây -->
+  </section>
+
+  <section class="admin-section">
+    <div class="admin-header">
+      <h2>Quản lý Người Dùng</h2>
+      <button id="addUserBtn" class="btn btn-primary">Thêm Người Dùng Mới</button>
+    </div>
+    <div class="filter-bar" style="margin-bottom: 20px;">
+      <input type="text" id="userEmailSearch" placeholder="Tìm theo email...">
+      <input type="text" id="userPhoneSearch" placeholder="Tìm theo SĐT...">
+    </div>
+    <table class="admin-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tên đăng nhập</th>
+        <th>Họ và Tên</th>
+        <th>Email</th>
+        <th>Số điện thoại</th>
+        <th>Địa chỉ</th>
+        <th>Vai trò</th>
+        <th>Trạng thái</th>
+        <th style="width: 150px;">Hành động</th>
+      </tr>
+      </thead>
+      <tbody id="usersTableBody">
+      <!-- Dữ liệu Users sẽ được chèn vào đây -->
+      </tbody>
+    </table>
+    <div id="userPagination" class="pagination-container"></div>
+        <!-- Nút phân trang sẽ được JavaScript chèn vào đây -->
+
+  </section>
+</div>
+
+<!-- Modal để Thêm/Sửa Đợt Quyên Góp -->
+<div id="donationModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">×</span>
+    <h2 id="modalTitle">Thêm Đợt Quyên Góp Mới</h2>
+    <form id="donationForm">
+      <!-- Trường ẩn để lưu ID khi chỉnh sửa -->
+      <input type="hidden" id="donationId">
+      <div class="form-group">
+        <label for="name">Tên chiến dịch</label>
+        <input type="text" id="name" required>
+      </div>
+      <div class="form-group">
+        <label for="code">Mã chiến dịch (Không thể thay đổi sau khi tạo)</label>
+        <input type="text" id="code" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Mô tả</label>
+        <textarea id="description" rows="4"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="money">Mục tiêu (VND)</label>
+        <input type="number" id="money" min="1000" required>
+      </div>
+      <div class="form-group">
+        <label for="startDate">Ngày bắt đầu</label>
+        <input type="date" id="startDate" required>
+      </div>
+      <div class="form-group">
+        <label for="endDate">Ngày kết thúc</label>
+        <input type="date" id="endDate" required>
+      </div>
+      <!-- Trường status chỉ hiển thị khi chỉnh sửa -->
+      <div class="form-group" id="statusGroup" style="display: none;">
+        <label for="status">Trạng thái</label>
+        <select id="status">
+          <option value="UPCOMING">Sắp diễn ra</option>
+          <option value="ACTIVE">Đang hoạt động</option>
+          <option value="ENDED">Đã kết thúc</option>
+          <option value="CLOSED">Đã đóng</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Lưu lại</button>
+    </form>
+  </div>
+</div>
+
+<!-- === THÊM MODAL MỚI CHO USER === -->
+<div id="userModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button" id="userModalCloseBtn">×</span>
+    <h2 id="userModalTitle">Thêm Người Dùng Mới</h2>
+    <form id="userForm">
+      <input type="hidden" id="userId">
+      <div class="form-group">
+        <label for="userName">Tên đăng nhập</label>
+        <input type="text" id="userName" required>
+      </div>
+      <div class="form-group" id="passwordGroup">
+        <label for="password">Mật khẩu</label>
+        <input type="password" id="password" placeholder="Để trống nếu không muốn đổi">
+      </div>
+      <div class="form-group">
+        <label for="fullName">Họ và Tên</label>
+        <input type="text" id="fullName" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label for="phoneNumber">Số điện thoại</label>
+        <input type="tel" id="phoneNumber">
+      </div>
+      <div class="form-group">
+        <label for="address">Địa chỉ</label>
+        <input type="text" id="address">
+      </div>
+      <div class="form-group">
+        <label for="roleId">Vai trò</label>
+        <select id="roleId" required>
+          <!-- Options sẽ được load từ API -->
+        </select>
+      </div>
+      <div class="form-group" id="userStatusGroup" style="display: none;">
+        <label for="userStatus">Trạng thái</label>
+        <select id="userStatus">
+          <option value="ACTIVE">Hoạt động</option>
+          <option value="INACTIVE">Không hoạt động</option>
+          <option value="BANNED">Bị khóa</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Lưu Người Dùng</button>
+    </form>
+  </div>
+</div>
+<div id="viewDetailModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">×</span>
+    <h2 id="viewModalTitle">Chi tiết</h2>
+    <div id="viewModalBody">
+      <!-- Nội dung chi tiết sẽ được JavaScript chèn vào đây -->
+    </div>
+  </div>
+</div>
+<!-- Vùng chứa các thông báo toast -->
+<div id="toast-container"></div>
+
+<!-- Liên kết đến các file JavaScript -->
+<script src="js/app.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi Tiết Đợt Quyên Góp</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+</head>
+<body>
+<!-- Thanh điều hướng chung -->
+<header class="main-header">
+  <a href="index.html" class="logo">DonationApp</a>
+  <nav>
+    <!-- JS sẽ điền nội dung vào đây -->
+  </nav>
+</header>
+
+<!-- Nội dung chính của trang -->
+<div class="container">
+  <a href="index.html" style="display: inline-block; margin-bottom: 20px;">← Quay lại trang chủ</a>
+
+  <!-- Loader hiển thị trong khi tải dữ liệu -->
+  <div id="loader" class="loader">Đang tải chi tiết...</div>
+
+  <!-- Container chính, ban đầu bị ẩn -->
+  <div id="donationDetail" style="display: none;">
+    <div class="detail-layout">
+      <!-- Cột nội dung chính -->
+      <div class="detail-main-content">
+        <h2 id="donationName"></h2>
+        <p><span id="donationStatus" class="status"></span></p>
+        <p><strong>Tổ chức:</strong> <span id="organizationName"></span></p>
+        <p><strong>Thời gian diễn ra:</strong> <span id="donationDate"></span></p>
+        <hr>
+        <h3>Mô tả chiến dịch</h3>
+        <p id="donationDescription"></p>
+
+        <!-- === KHU VỰC HIỂN THỊ DANH SÁCH ĐÃ ĐƯỢC SỬA LẠI === -->
+        <div class="contributor-list" style="margin-top: 30px;">
+
+          <!-- Thêm span để hiển thị tổng số lượt -->
+          <h3>Danh sách Nhà Hảo Tâm (<span id="totalContributors">0</span> lượt)</h3>
+
+          <!-- Thêm loader riêng cho danh sách -->
+          <div id="contributorsLoader" class="loader" style="display: none; padding: 20px; font-size: 1em;">Đang tải danh sách...</div>
+
+          <!-- Danh sách ul -->
+          <ul id="contributors">
+            <!-- Danh sách người quyên góp sẽ được JavaScript chèn vào đây -->
+          </ul>
+
+          <!-- Thêm div để chứa các nút phân trang -->
+          <div id="contributorsPagination" class="pagination-container" style="justify-content: flex-start; margin-top: 20px;">
+            <!-- Các nút phân trang sẽ được JavaScript chèn vào đây -->
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Cột bên phải (sidebar) chứa form quyên góp -->
+      <div class="detail-sidebar">
+        <h3>Ủng hộ chiến dịch này</h3>
+        <div class="progress-bar">
+          <div id="detailProgress" class="progress"></div>
+        </div>
+        <div class="money-info">
+          <strong>Đã quyên góp:</strong> <span id="amountRaised"></span>
+        </div>
+        <div class="money-info">
+          <strong>Mục tiêu:</strong> <span id="targetMoney"></span>
+        </div>
+        <hr style="margin: 20px 0;">
+
+        <!-- Form để thực hiện quyên góp -->
+        <form id="contributionForm">
+          <p style="font-size: 1.1em; font-weight: bold;">Thực hiện quyên góp</p>
+          <div class="form-group">
+            <label for="userId">User ID (Tạm thời để test)</label>
+            <input type="number" id="userId" value="1" required>
+          </div>
+          <div class="form-group">
+            <label for="amount">Số tiền (VND)</label>
+            <input type="number" id="amount" min="1000" placeholder="Nhập số tiền..." required>
+          </div>
+          <div class="form-group">
+            <label for="message">Lời nhắn (Tùy chọn)</label>
+            <textarea id="message" rows="3" placeholder="Gửi lời chúc..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">Quyên góp ngay</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Vùng chứa các thông báo toast -->
+<div id="toast-container"></div>
+
+<!-- Liên kết đến các file JavaScript -->
+<script src="js/app.js"></script>
+<script src="js/donationDetail.js"></script>
+</body>
+</html>

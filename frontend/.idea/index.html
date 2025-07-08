@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation App - Trang Chủ</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Icon cho tab trình duyệt -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+</head>
+<body>
+
+<!-- Thanh điều hướng chung -->
+<header class="main-header">
+    <a href="index.html" class="logo">DonationApp</a>
+    <nav>
+        <a href="admin.html">Trang Quản Trị</a>
+        <a href="login.html">Đăng nhập</a>
+    </nav>
+</header>
+
+<!-- Nội dung chính của trang -->
+<div class="container">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1>Các Chiến Dịch Quyên Góp</h1>
+        <p style="font-size: 1.2em; color: #6c757d;">Chung tay vì một cộng đồng tốt đẹp hơn.</p>
+    </div>
+
+    <!-- Thanh tìm kiếm và lọc -->
+    <div class="filter-bar">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên hoặc mã chiến dịch...">
+        <select id="statusFilter">
+            <option value="">Tất cả trạng thái</option>
+            <option value="UPCOMING">Sắp diễn ra</option>
+            <option value="ACTIVE">Đang hoạt động</option>
+            <option value="ENDED">Đã kết thúc</option>
+            <option value="CLOSED">Đã đóng</option>
+        </select>
+    </div>
+
+    <!-- Khu vực hiển thị loader và lưới các thẻ donation -->
+    <div id="loader" class="loader">Đang tải dữ liệu...</div>
+    <div id="donationGrid" class="donation-grid">
+        <!-- Dữ liệu sẽ được JavaScript chèn vào đây -->
+    </div>
+    <div id="paginationContainer" class="pagination-container" style="margin-top: 40px;">
+        <!-- Các nút phân trang sẽ được JavaScript chèn vào đây -->
+    </div>
+</div>
+
+<!-- Vùng chứa các thông báo toast -->
+<div id="toast-container"></div>
+
+<!-- Liên kết đến các file JavaScript -->
+<script src="js/app.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>
